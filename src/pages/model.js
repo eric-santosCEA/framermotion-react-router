@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 //Components
 import ScrollForMore from "../components/scrollForMore";
-import {motion} from 'framer-motion'
+import {motion, useTransform, useViewportScroll} from 'framer-motion'
 //Ease
+
 const transition = {duration: 1.4, ease: [.6, .01, -.0, 0.9]}
 
 const firstName = {
@@ -37,11 +38,30 @@ const letter = {
 
 
 const Model = ({imageDetails}) => {
+  const {scrollYProgress} = useViewportScroll();
+  //the array specifies where on the viewport we are based on the above, 0 is top, 1 is bottom
+  //second array specifies what sizes to scale to, 0-1 and at 1-1.15
+  //used with style={{}}
+  const scale = useTransform(scrollYProgress, [0,1], [1, 1.15])
+  // const opacity = useTransform(scrollYProgress, [0,1], [1, 0])
+
+  const [canScroll, setCanScroll] = useState(false)
+
+  useEffect(()=> {
+    if (canScroll === false) {
+      document.querySelector('body').classList.add('no-scroll')
+    }
+    else {
+      document.querySelector('body').classList.remove('no-scroll')
+    }
+  }, [canScroll])
+
   return (
     <motion.div className='single'
     initial='initial'
     animate='animate'
     exit='exit'
+    onAnimationComplete={()=> setCanScroll(true)}
     >
       <div className='container fluid'>
         <div className='row center top-row'>
@@ -93,6 +113,7 @@ const Model = ({imageDetails}) => {
               >
                 <div className='frame-single'>
                   <motion.img
+                  style={{scale: scale}}
                   src={require("../images/yasmeen.webp")} alt='model'
                   initial={{scale: 1.1}}
                   animate={{
