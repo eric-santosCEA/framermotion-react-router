@@ -41,7 +41,7 @@ const Model = () => {
             <div className='image-container-single'>
               <div className='thumbnail-single'>
                 <div className='frame-single'>
-                  <img src={require("../images/yasmeen.webp")} alt='an image' />
+                  <img src={require("../images/yasmeen.webp")} alt='model' />
                 </div>
               </div>
             </div>
